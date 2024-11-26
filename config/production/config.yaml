@@ -1,0 +1,10 @@
+baseURL: https://waitwhatsthat.com
+buildDrafts: false
+enableRobotsTXT: true
+languageCode: en-us
+publishDir: public
+SectionPagesMenu: main
+theme:
+  - github.com/theNewDynamic/gohugo-theme-ananke
+timeout: 60000
+title: Wait What's That?

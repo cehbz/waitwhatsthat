@@ -1,0 +1,5 @@
+<video
+  class="video-shortcode" preload="{{ with .Get "preload" }}{{.}}{{else}}true{{end}}" controls>
+  <source src="{{ .Get "src" }}" type="{{ .Get "type" }}">
+  This browser does not support this video.
+</video>

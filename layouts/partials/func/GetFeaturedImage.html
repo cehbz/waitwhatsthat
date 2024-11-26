@@ -1,0 +1,34 @@
+{{/*
+    GetFeaturedImage
+
+    This partial gets the featured image for a given page.
+
+    If a featured_image was set in the page's front matter, then that will be used.
+
+    If not set, this will search page resources to find an image that contains the word
+    "cover", and if found, returns the path to that resource.
+
+    If no featured_image was set, and there's no "cover" image in page resources, then
+    this partial returns the site featured_image
+
+    @return Permalink to featured image, or an empty string if not found.
+
+*/}}
+
+{{/* Declare a new image asset variable, $coverImg defaults to site image if any*/}}
+{{ $coverImg := resources.Get (trim (site.Params.featured_image) "/") }}
+{{/* Use the value from front matter if present */}}
+{{ if .Params.featured_image }}
+    {{ $imgPath := .Params.featured_image }}
+    {{ $imgPath = (trim $imgPath "/") }}
+    {{ $coverImg = .Page.Resources.GetMatch $imgPath }}
+    {{ if not $coverImg }}
+      {{/* if not found, try as a global asset */}}
+      {{ $coverImg = resources.Get $imgPath }}
+    {{ end }}
+{{ else }}
+  {{/* Find the first image with 'cover' in the name in this page bundle. */}}
+  {{ with (.Resources.ByType "image").GetMatch "*cover*" }}{{ $coverImg = . }}{{ end }}
+{{ end }}
+
+{{ return $coverImg }}

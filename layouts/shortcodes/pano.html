@@ -1,0 +1,33 @@
+<div>
+<link rel="stylesheet" href="/pannellum/pannellum.css"/>
+<script type="text/javascript" src="/pannellum/pannellum.js"></script>
+<style>
+  .ar32 {
+    aspect-ratio: 3 / 2;
+  }
+  @supports not (aspect-ratio: 3 / 2) {
+    .ar32::before {
+      float: left;
+      padding-top: 66.67%;
+      content: "";
+    }
+    .ar32::after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+  }
+</style>
+<script>
+  let d = document.createElement("div");
+  d.classList.add("ar32");
+  let s = document.currentScript;
+  if (! s) {
+    s = scripts[scripts.length - 1];
+  }
+  s.parentNode.insertBefore(d, s);
+  pannellum.viewer(
+  d,
+  {"type": "equirectangular", "panorama": "{{ .Get "src" }}", "autoLoad": true});
+</script>
+</div>

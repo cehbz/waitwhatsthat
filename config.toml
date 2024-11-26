@@ -1,0 +1,41 @@
+baseURL = "https://waitwhatsthat.com"
+languageCode = "en-us"
+title = "Wait What's That"
+theme = "PaperMod"
+
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+[params]
+  description = "Discovering remarkable food and experiences around the world"
+  mainSections = ["posts"]
+  ShowShareButtons = true
+  ShowReadingTime = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+
+[taxonomies]
+  tag = "tags"
+  location = "locations"
+
+[menu]
+  [[menu.main]]
+    name = "Archive"
+    url = "/posts/"
+    weight = 5
+  [[menu.main]]
+    name = "Tags"
+    url = "/tags/"
+    weight = 10
+  [[menu.main]]
+    name = "Locations"
+    url = "/locations/"
+    weight = 15
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 20

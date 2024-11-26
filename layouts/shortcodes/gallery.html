@@ -1,0 +1,57 @@
+{{- $galleryCSS := resources.Get "gallery.css" | fingerprint -}}
+
+{{- $originals := .Page.Resources.ByType "image" -}}
+{{- $scratch := newScratch -}}
+{{- range $idx, $value := $originals -}}
+  {{- $key := add now.Unix $idx -}}
+  {{- with .Exif }}{{- with .Date -}}{{$key = .Unix}}{{end}}{{end}}
+  {{- $scratch.Add "values" (slice (dict "key" $key "value" $value)) -}}
+{{- end -}}
+{{- $originals = slice -}}
+{{- range sort ($scratch.Get "values") "key" -}}{{$originals = $originals | append .value}}{{end}}
+<link href="{{ $galleryCSS.RelPermalink }}" rel="stylesheet">
+{{- $galleryId := (printf "gallery-%v" .Ordinal) }}
+<gallery id="{{ $galleryId }}">
+  {{ $index := 0 }}
+  {{- range $originals -}}
+    {{- $alt := "" -}}
+    {{- with .Exif -}}{{- with .Tags -}}
+      {{- with .Headline -}}
+        {{- $alt = . -}}
+      {{- else -}}
+        {{- with .Title -}}
+          {{- $alt = . -}}
+        {{- else -}}
+          {{- with .ImageDescription -}}
+            {{- $alt = . -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}{{- end -}}
+    {{- $thumbnail := (.Resize "x150 Lanczos webp") -}}
+    {{- $srcSet := partial "func/SrcSet" $thumbnail -}}
+    {{- $lqip := partial "func/lqip" . -}}
+    {{- $aspectRatio := div (float $thumbnail.Width) $thumbnail.Height -}}
+    {{- $sz := math.Round (mul $aspectRatio 150) -}}
+    <div style="Width:{{$sz}}px;flex-grow:{{$sz}}">
+      {{- $aspectRatio = div (math.Round (mul (div 100 $aspectRatio) 10)) 10}}
+      <i style="padding-bottom:{{$aspectRatio}}%"></i>
+      <img
+        src="{{$thumbnail.RelPermalink}}"
+        {{ printf "style=\"background-size: cover; background-image: url(%s);\"" $lqip | safeHTMLAttr }}
+        loading="lazy"
+        {{ with $srcSet -}}
+          srcset="{{.}}" data-sizes="{{$sz}}w"
+        {{- else -}}
+          srcset="{{$thumbnail.RelPermalink}}"
+        {{- end }}
+        data-idx={{$index}}
+        width={{$thumbnail.Width}} height={{$thumbnail.Height}}
+        alt={{$alt}}
+      >
+    </div>
+    {{ $index = add $index 1 }}
+  {{- end -}}
+</gallery>
+
+{{ partial "partials/lightbox.html" $originals }}

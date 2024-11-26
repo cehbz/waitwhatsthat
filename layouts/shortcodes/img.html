@@ -1,0 +1,35 @@
+{{- $src := .Get "src" -}}
+{{- $fill := .Get "fill" -}}
+{{- $fit := .Get "fit" -}}
+{{- $resize := .Get "resize" -}}
+{{- $caption := .Get "caption" -}}
+{{- $alt := "" -}}
+{{- with .Get "alt" -}}{{$alt = .}}{{else}}{{$alt = $caption}}{{- end -}}
+{{- $sizes := .Get "sizes" | default "(min-width: 60em) calc(((100vw - 1rem - 1rem) * 2 / 3 - 2rem) * 1 / 3), calc((100vw - 1rem - 1rem) * 1 / 3)" -}}
+{{- $class := .Get "class" | default "fr w-33" -}}
+{{- $refImg := .Page.Resources.GetMatch $src -}}
+{{- $srcImg := $refImg -}}
+{{- $lqip := partial "func/lqip" $srcImg -}}
+{{- if $fill -}}{{- $srcImg := $refImg.Fill (printf "%s webp" $fill) -}}{{- end -}}
+{{- if $fit -}}{{- $srcImg := $refImg.Fit (printf "%s webp" $fit) -}}{{- end -}}
+{{- if $resize -}}{{- $srcImg := $refImg.Resize (printf "%s webp" $resize) -}}{{- end -}}
+{{- $idx := partial "func/IndexOf" (dict "collection" (.Page.Resources.ByType "image") "element" $refImg.RelPermalink) -}}
+{{- $srcSet := partial "func/SrcSet" $srcImg -}}
+<figure class="{{$class}}">
+  {{ if eq $idx -1 }}<a href="{{ $refImg.RelPermalink }}">{{ end }}
+      <img
+        src="{{ $srcImg.RelPermalink }}"
+        {{ printf "style=\"background-size: cover; background-image: url(%s);\"" $lqip | safeHTMLAttr }}
+        loading="lazy"
+        {{ with $srcSet -}}
+          srcset="{{.}}" sizes="{{$sizes}}"
+        {{- else -}}
+          data-srcset="{{$srcImg.RelPermalink}}"
+        {{- end }}
+        {{ if ne $idx -1 }}data-idx="{{ $idx }}"{{ end }}
+        width={{$srcImg.Width}} height={{$srcImg.Height}}
+        alt={{$alt}}
+      >
+  {{ if eq $idx -1 }}</a>{{ end }}
+  <figcaption>{{ $caption }}</figcaption>
+</figure>

@@ -1,0 +1,14 @@
+{{/*
+this function takes an image resource and returns a slice containing
+widths and background-image RelPermalinks that can then be used in a css
+image-set
+*/}}
+{{- $img := . -}}
+{{- $sizes := (slice 320 480 768 1024 1280) -}}
+{{- $srcSet := slice }}
+{{- range $sizes -}}
+  {{- if lt . $img.Width -}}
+    {{- $srcSet = $srcSet | append (dict "width" . "url" ($img.Resize (printf "%dx q75 Lanczos webp" .)).RelPermalink) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $srcSet -}}

@@ -1,0 +1,30 @@
+gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+gallery::after {
+    content: '';
+    flex-grow: 999999999;
+}
+gallery div {
+    margin: .25rem;
+    background-color: violet;
+    position: relative;
+}
+gallery i{
+    display: block;
+}
+gallery img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    vertical-align: bottom;
+}
+img[loading="lazy"] {
+    filter: blur(5px);
+    transition: filter 400ms;
+}
+
+img[loading="lazy"].loaded {
+    filter: blur(0);
+}

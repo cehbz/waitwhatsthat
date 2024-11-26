@@ -1,0 +1,10 @@
+baseURL: /
+buildDrafts: true
+enableRobotsTXT: true
+languageCode: en-us
+publishDir: test
+SectionPagesMenu: main
+theme:
+  - github.com/theNewDynamic/gohugo-theme-ananke
+timeout: 60000
+title: Wait What's That? (Development)

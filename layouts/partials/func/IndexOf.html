@@ -1,0 +1,19 @@
+{{/*
+IndexOf
+
+This partial returns the index of an RelPermalink in a collection of resources.
+
+It expects to be passed a dictionary of (dict "collection" $collection "element"
+$element) as the context. Where collection is a collection of page resources,
+and element is the RelPermalink of one of them.
+
+
+@returns index of $element in $collection, or -1 if not found
+*/}}
+
+{{ $retVal := -1 }}
+{{ $e := .element }}
+{{ range $idx, $val := .collection }}
+  {{ if eq $e $val.RelPermalink }}{{ $retVal = $idx }}{{end}}
+{{end}}
+{{ return $retVal }}

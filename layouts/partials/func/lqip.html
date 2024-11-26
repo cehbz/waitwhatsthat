@@ -1,0 +1,6 @@
+{{/*
+This function takes an image and generates a LQIP for it
+suitable for using as a URL/src
+*/}}
+{{ $preview := .Fit "16x16 q20 webp" }}
+{{ return printf "data:image/webp;base64,%s" ($preview.Content|base64Encode) }}

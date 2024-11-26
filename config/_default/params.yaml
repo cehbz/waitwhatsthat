@@ -1,0 +1,21 @@
+favicon: ""
+site_logo: ""
+description: Two old folks travelling the world with no baggage
+mainSections:
+  - posts
+facebook: ""
+twitter: ""
+instagram: ""
+youtube: ""
+github: ""
+gitlab: ""
+linkedin: ""
+mastodon: ""
+slack: ""
+stackoverflow: ""
+rss: ""
+background_color_class: bg-dark-green
+featured_image: /images/jizos.jpg
+body_classes: avenir bg-washed-yellow
+recent_posts_number: 6
+galleryLoadJQuery: true
