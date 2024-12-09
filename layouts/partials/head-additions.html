@@ -1,24 +1,19 @@
 <style type="text/css">
   {{/* add default img height */}}
-  img { height: auto; } {{/* tachyons doesn't have it, need it for responsive images with heights */}}
-
-  {{/*
-  set the featured image for the page
-
-  make it responsive
-  */}}
+  img { height: auto; }
+  
+  {{/* Set the featured image for the page */}}
   {{- $featured_image := partial "func/GetFeaturedImage.html" . }}
-  {{- if $featured_image }}
-    {{- $imageSet := partial "func/ImageSet.html" $featured_image -}}
+  {{- with $featured_image }}
+    {{- $imageSet := partial "func/ImageSet.html" . -}}
     {{- $w := "screen" -}}
     {{- if $imageSet -}}
-      {{- $imageSet = $imageSet | append (dict "url" $featured_image.RelPermalink "width" $featured_image.Width) -}}
+      {{- $imageSet = $imageSet | append (dict "url" .RelPermalink "width" .Width) -}}
       {{- range $kv := $imageSet }}
        {{- $r := slice -}}
         {{- range $x := slice 1.0 1.5 2.0 -}}
-          {{- $xs := trim (printf "%.1f" $x) "0." -}}{{/* 1.0 => 1, 1.5 => 1.5, 2.0 => 2 */}}
-          {{- $r = $r
-          | append (printf "screen and (min-width: %.0fpx) and (min-resolution: %sx)"
+          {{- $xs := trim (printf "%.1f" $x) "0." -}}
+          {{- $r = $r | append (printf "screen and (min-width: %.0fpx) and (min-resolution: %sx)"
             (math.Round (div $kv.width $x)) $xs) -}}
         {{- end }}
         @media {{ delimit $r ", "|safeCSS}} {
@@ -29,7 +24,7 @@
       {{- end }}
     {{- else -}}
       header.bg-top {
-        background-image: url('{{$featured_image.RelPermalink}}');
+        background-image: url('{{.RelPermalink}}');
       }
     {{- end }}
   {{end}}

@@ -1,26 +1,18 @@
-baseURL = "https://waitwhatsthat.com"
-languageCode = "en-us"
-title = "Wait What's That"
-theme = "PaperMod"
-
-enableRobotsTXT = true
+baseURL = 'https://www.waitwhatsthat.com/'
+languageCode = 'en-us'
+title = "Wait What's That?"
+theme = 'ananke'
 buildDrafts = false
 buildFuture = false
 buildExpired = false
+enableRobotsTXT = true
 
 [params]
   description = "Discovering remarkable food and experiences around the world"
   mainSections = ["posts"]
-  ShowShareButtons = true
-  ShowReadingTime = true
-  ShowPostNavLinks = true
-  ShowBreadCrumbs = true
-  ShowCodeCopyButtons = true
-  ShowToc = true
 
-[taxonomies]
-  tag = "tags"
-  location = "locations"
+[services.disqus]
+  shortname = "waitwhatsthat"
 
 [menu]
   [[menu.main]]
@@ -39,3 +31,7 @@ buildExpired = false
     name = "About"
     url = "/about-us/"
     weight = 20
+
+[taxonomies]
+  tag = "tags"
+  location = "locations"
