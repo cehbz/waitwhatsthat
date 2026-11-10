@@ -92,7 +92,7 @@ local tea and panela, and an alembic still and alcoholic herbal
 infusions.
 
 After the site tour we were seated in the restaurant. Similarly to
-[Central](/central/) the menu is organized by
+[Central](/posts/central/) the menu is organized by
 geography, primarily by elevation, and beyond dietary restrictions
 there aren’t any choices. We also chose to have the non-alcoholic
 beverage pairings.
@@ -172,7 +172,7 @@ fingers.
 
 This was more of a palate cleanser than a dessert. Tart tumbo granita
 with fresh wild muña leaves and a pink potato puree colored with
-kjolle flower. [Kjolle](/kjolle/) is also the
+kjolle flower. [Kjolle](/posts/kjolle/) is also the
 name of Pia León's restaurant in Lima.
 
 ## Huatia of Cacao

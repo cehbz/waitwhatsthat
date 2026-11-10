@@ -56,7 +56,7 @@ ribeye steak). This way way too much food, but so worth it.
 The first appetiser, mollejas (sweetbreads) over _camote_ (sweet
 potato), was much larger than we had expected. It was five grilled
 sweetbreads over camote puree, and reminded me a bit of the mollejas
-at [Cosme.](/cosme/) Nicely griddled, well
+at [Cosme.](/posts/cosme/) Nicely griddled, well
 balanced by the sweetness of the camote.
 
 ### Anticuchos

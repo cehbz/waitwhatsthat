@@ -16,7 +16,7 @@ featured_image: "images/Lima-Maido-Sansei-ceviche.jpg"
 
 ## The food
 
-The first time we went to [Maido](/maido/) we
+The first time we went to [Maido](/posts/maido/) we
 had their "Nikkei Experience," a multi-course degustation menu. We saw
 some dishes go by that looked pretty interesting but weren't included
 so we decided to go back and try the a la carte menu. (Getting in to

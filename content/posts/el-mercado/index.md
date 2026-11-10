@@ -12,7 +12,7 @@ featured_image: "images/Lima-El-Mercado-Conchas.jpg"
 ## The place
 
 El Mercado is a fancy fish oriented restaurant by Rafael Osterling
-(the chef/owner of [Rafael.](https://waitwhatsthat.com/rafael/)) It
+(the chef/owner of [Rafael.](/posts/rafael/)) It
 has a reputation as the best cevicheria in Lima and it regularly makes
 the lists of the best restaurants in Peru. Sounded like our kind of
 place.

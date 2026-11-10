@@ -9,7 +9,7 @@ tags:
 featured_image: "images/Lima-Tubers.jpg"
 ---
 Kjolle is the sister restaurant to
-[Central](/central/), the most famous
+[Central](/posts/central/), the most famous
 restaurant in Lima. It's the project of Pia León, co-chef and partner
 with Virgilio Martínez in Central. Despite being co-chef and partner,
 she usually doesn't get as much credit. With Kjolle she will hopefully

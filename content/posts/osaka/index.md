@@ -9,7 +9,7 @@ featured_image: "images/Lima-Osaka-Unagi-nigiri.jpg"
 
 Osaka has a reputation as one of the best _nikkei_
 (Japanese-Peruvian) places in Lima. It may not be as internationally
-famous as [Maido](/maido/), but it's well
+famous as [Maido](/posts/maido/), but it's well
 known locally. At first my attitude was "I didn't come to Lima to eat
 Japanese food" but that was foolish. There have been Japanese in Peru
 for centuries, using local ingredients to prepare Japanese
