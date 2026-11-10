@@ -116,7 +116,10 @@ def check_build(c, build):
                     c.check(resolves(build, link, page_url),
                             f"{rel}: broken link {link}")
             with open(path, encoding="utf-8") as f:
-                c.check("/thumb/" not in f.read(), f"{rel}: contains /thumb/")
+                html = f.read()
+            c.check("/thumb/" not in html, f"{rel}: contains /thumb/")
+            c.check('getAttribute("data-idx")' not in html,
+                    f"{rel}: lightbox indexes photos by data-idx")
             for img in page.imgs:
                 full = img.get("data-full", "")
                 c.check(full and resolves(build, full),

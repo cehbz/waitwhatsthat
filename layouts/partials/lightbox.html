@@ -6,15 +6,22 @@
 <script src="{{ $photoSwipeLightbox.RelPermalink }}"></script>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-  // Build items array from the DOM instead of during build
+  // One item per photo, in gallery order, then photos that are only inline
   const items = [];
-  const images = document.querySelectorAll('img[data-idx]');
+  const position = new Map();
+  const images = [
+    ...document.querySelectorAll('gallery img[data-full]'),
+    ...document.querySelectorAll('img[data-full]')
+  ];
   images.forEach(img => {
-    items[parseInt(img.getAttribute('data-idx'), 10)] = {
-      src: img.dataset.full,
+    const src = img.dataset.full;
+    if (position.has(src)) return;
+    position.set(src, items.length);
+    items.push({
+      src: src,
       w: parseInt(img.dataset.fullW, 10),
       h: parseInt(img.dataset.fullH, 10)
-    };
+    });
   });
 
   const lightbox = new PhotoSwipeLightbox({
@@ -27,10 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Add click handlers to images
   images.forEach(img => {
-    const idx = img.getAttribute("data-idx");
-    if (idx) {
-      img.onclick = () => lightbox.loadAndOpen(parseInt(idx, 10));
-    }
+    img.onclick = () => lightbox.loadAndOpen(position.get(img.dataset.full));
   });
 
   lightbox.init();
