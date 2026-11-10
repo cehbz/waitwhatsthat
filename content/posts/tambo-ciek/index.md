@@ -16,7 +16,7 @@ discovered Tambo Ciek.
 
 ## Specials
 
-{{< img src="images/PXL_20210508_023047531.png" alt="specials board" caption="Today Special" >}}
+{{< img src="images/PXL_20210508_023047531.webp" alt="specials board" caption="Today Special" >}}
 
 We walked in and saw the specials board:
 
@@ -37,7 +37,7 @@ the two bakso and a cilok to share.
 
 ## Bakso
 
-{{< img src="images/PXL_20210508_024606948.png" alt="bowl of soup" caption="Bakso Tetelan" >}}
+{{< img src="images/PXL_20210508_024606948.webp" alt="bowl of soup" caption="Bakso Tetelan" >}}
 
 Bakso is a meatball noodle soup with vegetables. Bakso "tenis" has a
 big meatball (the size of a tennis ball - thus the name) that has a
@@ -48,7 +48,7 @@ manis for sweetness, sambal for spice, and or vinegar for sourness.
 
 ## Cilok
 
-{{< img src="images/PXL_20210508_024603791.png" alt="tapioca balls" caption="Cilok" >}}
+{{< img src="images/PXL_20210508_024603791.webp" alt="tapioca balls" caption="Cilok" >}}
 
 Cilok are glutinous tapioca flour balls in a peanut sauce. The balls
 themselves are soft and very chewy, and the peanut sauce is sweet,
