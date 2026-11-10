@@ -24,14 +24,10 @@ enableRobotsTXT = true
     url = "/tags/"
     weight = 10
   [[menu.main]]
-    name = "Locations"
-    url = "/locations/"
-    weight = 15
-  [[menu.main]]
     name = "About"
     url = "/about-us/"
     weight = 20
 
 [taxonomies]
   tag = "tags"
-  location = "locations"
+  category = "categories"
