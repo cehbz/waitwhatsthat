@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Check that a built site (and optionally the live site) behaves as intended.
+
+  check-site [--build DIR] [--live BASE_URL]
+
+Build checks run against the Hugo output directory (default: public).
+Live checks request BASE_URL without following redirects.
+Exit status is the number of failed checks (capped at 1).
+"""
+import argparse
+import http.client
+import os
+import re
+import sys
+import urllib.parse
+from html.parser import HTMLParser
+
+SITE_TITLE = "Wait What's That?"
+
+# Every post the site has published (2018 WordPress, 2021 and 2024 Hugo).
+POSTS = """
+amoramar astrid-y-gaston central colca-canyon cosme costanera-700 cusco
+dental-adventures-in-georgia el-mercado el-pan-de-la-chola
+essaouira-fish-market-lunch huacachina ik-restaurante kjolle la-mar
+la-paz-street-food machu-picchu maido maido-redux malabar manolo nazca osaka
+osso panaderias-and-pastelarias panchita paracas-islas-ballestas rafael
+tambo-ciek
+""".split()
+
+CATEGORIES = ["food", "markets", "restaurants"]
+
+# Old URL -> current URL, from the Wayback Machine inventory of the domain.
+OLD_URLS = (
+    [(f"/{s}/", f"/posts/{s}/") for s in POSTS]
+    + [(f"/category/{c}/", f"/categories/{c}/") for c in CATEGORIES]
+    + [("/category/restaurants/page/2/", "/categories/restaurants/")]
+    + [(f"/tag/{t}/", f"/tags/{t}/")
+       for t in ["machu-picchu", "peru", "street-food", "trains", "travel"]]
+    + [(f"/{m}/", "/posts/")
+       for m in ["2018/08", "2018/10", "2018/11", "2018/12", "2019/08"]]
+    + [("/blog/", "/posts/"), ("/blog/page/2/", "/posts/")]
+    + [("/contact-us/", "/contact/")]
+    + [("/feed/", "/index.xml"), ("/comments/feed/", "/index.xml")]
+)
+
+
+class Page(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.links, self.imgs, self.times = [], [], []
+        self.title, self._in_title = "", False
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        for k in ("href", "src"):
+            if a.get(k):
+                self.links.append(a[k])
+        if tag == "img" and "data-idx" in a:
+            self.imgs.append(a)
+        if tag == "time":
+            self.times.append(a.get("datetime", ""))
+        if tag == "title" and not self.title:
+            self._in_title = True
+
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self._in_title = False
+
+    def handle_data(self, data):
+        if self._in_title:
+            self.title += data
+
+
+class Checker:
+    def __init__(self):
+        self.failures = 0
+
+    def check(self, ok, what):
+        if not ok:
+            self.failures += 1
+            print(f"FAIL {what}")
+
+
+def parse(path):
+    p = Page()
+    with open(path, encoding="utf-8") as f:
+        p.feed(f.read())
+    return p
+
+
+def resolves(build, url, page_url="/"):
+    url = urllib.parse.urljoin(page_url, url)
+    path = urllib.parse.unquote(urllib.parse.urlsplit(url).path)
+    f = os.path.join(build, path.lstrip("/"))
+    return os.path.isfile(f) or os.path.isfile(os.path.join(f, "index.html"))
+
+
+def internal(url):
+    u = urllib.parse.urlsplit(url)
+    if url.startswith("//") or u.scheme in ("mailto", "data", "javascript"):
+        return False
+    return u.netloc in ("", "www.waitwhatsthat.com", "waitwhatsthat.com")
+
+
+def check_build(c, build):
+    for root, _, files in os.walk(build):
+        for name in files:
+            if not name.endswith(".html"):
+                continue
+            path = os.path.join(root, name)
+            page = parse(path)
+            rel = os.path.relpath(path, build)
+            page_url = "/" + os.path.dirname(rel) + "/"
+            for link in page.links:
+                if internal(link) and urllib.parse.urlsplit(link).path:
+                    c.check(resolves(build, link, page_url),
+                            f"{rel}: broken link {link}")
+            with open(path, encoding="utf-8") as f:
+                c.check("/thumb/" not in f.read(), f"{rel}: contains /thumb/")
+            for img in page.imgs:
+                full = img.get("data-full", "")
+                c.check(full and resolves(build, full),
+                        f"{rel}: gallery image {img.get('src')} has no original")
+
+    for slug in POSTS:
+        f = os.path.join(build, "posts", slug, "index.html")
+        if not os.path.isfile(f):
+            c.check(False, f"post {slug} missing")
+            continue
+        page = parse(f)
+        c.check(page.title.strip() not in ("", SITE_TITLE),
+                f"post {slug}: no title")
+        c.check(any(t and not t.startswith("0001") for t in page.times),
+                f"post {slug}: no date")
+
+    for cat in CATEGORIES:
+        c.check(os.path.isfile(os.path.join(build, "categories", cat, "index.html")),
+                f"category {cat} page missing")
+
+    home = parse(os.path.join(build, "index.html"))
+    c.check(not any("/locations/" in l for l in home.links),
+            "menu links to /locations/")
+
+    with open(os.path.join(build, "robots.txt"), encoding="utf-8") as f:
+        robots = f.read()
+    c.check("Sitemap: https://www.waitwhatsthat.com/sitemap.xml" in robots,
+            "robots.txt sitemap URL")
+
+
+def get(base, path):
+    u = urllib.parse.urlsplit(base)
+    conn = (http.client.HTTPSConnection if u.scheme == "https"
+            else http.client.HTTPConnection)(u.netloc, timeout=30)
+    conn.request("GET", path, headers={"User-Agent": "check-site"})
+    r = conn.getresponse()
+    return r.status, r.getheader("Location", ""), r.read()
+
+
+def check_live(c, base):
+    host = base.rstrip("/")
+    for old, new in OLD_URLS:
+        status, loc, _ = get(base, old)
+        c.check(status == 301 and loc in (new, host + new),
+                f"live {old}: got {status} {loc}, want 301 {new}")
+    status, _, body = get(base, "/no-such-page-check-site/")
+    c.check(status == 404 and SITE_TITLE.encode() in body.replace(b"&#39;", b"'"),
+            f"live unknown URL: got {status}, {len(body)} bytes, want 404 page")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--build", default="public")
+    ap.add_argument("--live")
+    args = ap.parse_args()
+    c = Checker()
+    check_build(c, args.build)
+    if args.live:
+        check_live(c, args.live)
+    print(f"{c.failures} failure(s)")
+    return 1 if c.failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
