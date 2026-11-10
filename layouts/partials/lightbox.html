@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const images = document.querySelectorAll('img[data-idx]');
   images.forEach(img => {
     items[parseInt(img.getAttribute('data-idx'), 10)] = {
-      src: img.src.replace('/thumb/', '/'),  // Adjust this path as needed
-      w: img.naturalWidth,
-      h: img.naturalHeight
+      src: img.dataset.full,
+      w: parseInt(img.dataset.fullW, 10),
+      h: parseInt(img.dataset.fullH, 10)
     };
   });
 

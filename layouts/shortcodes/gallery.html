@@ -46,6 +46,7 @@
           srcset="{{$thumbnail.RelPermalink}}"
         {{- end }}
         data-idx={{$index}}
+        data-full="{{ .RelPermalink }}" data-full-w="{{ .Width }}" data-full-h="{{ .Height }}"
         width={{$thumbnail.Width}} height={{$thumbnail.Height}}
         alt={{$alt}}
       >

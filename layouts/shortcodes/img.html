@@ -26,7 +26,7 @@
         {{- else -}}
           data-srcset="{{$srcImg.RelPermalink}}"
         {{- end }}
-        {{ if ne $idx -1 }}data-idx="{{ $idx }}"{{ end }}
+        {{ if ne $idx -1 }}data-idx="{{ $idx }}" data-full="{{ $refImg.RelPermalink }}" data-full-w="{{ $refImg.Width }}" data-full-h="{{ $refImg.Height }}"{{ end }}
         width={{$srcImg.Width}} height={{$srcImg.Height}}
         alt={{$alt}}
       >
